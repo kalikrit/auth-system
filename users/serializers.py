@@ -47,3 +47,46 @@ class RegisterSerializer(serializers.ModelSerializer):
             patronymic=validated_data.get('patronymic', '')
         )
         return user
+    
+class LoginSerializer(serializers.Serializer):
+    """Сериализатор для входа в систему"""
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(
+        required=True,
+        write_only=True,
+        style={'input_type': 'password'}
+    )
+    
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+        
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"email": "Пользователь с таким email не найден"})
+        
+        if not user.is_active:
+            raise serializers.ValidationError({"email": "Аккаунт деактивирован"})
+        
+        if not user.check_password(password):
+            raise serializers.ValidationError({"password": "Неверный пароль"})
+        
+        attrs['user'] = user
+        return attrs
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    """Сериализатор для профиля пользователя"""
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'first_name', 'last_name', 'patronymic', 
+                  'is_active', 'date_joined', 'role')
+        read_only_fields = ('id', 'email', 'is_active', 'date_joined', 'role')
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    """Сериализатор для обновления профиля"""
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'patronymic')

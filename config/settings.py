@@ -93,9 +93,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication", # для сессий
     ],
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated", # по умолчанию требуем аутентитификацию
-    ]
+    "DEFAULT_PERMISSION_CLASSES": [],
 }
 
 # Password validation
