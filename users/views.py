@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import login, logout
+from django.views.decorators.csrf import csrf_exempt
 
 from .serializers import (
     RegisterSerializer, 
@@ -19,6 +20,7 @@ def profile_view(request):
     serializer = UserProfileSerializer(request.user)
     return Response(serializer.data)
 
+@csrf_exempt
 @api_view(['POST'])
 def register_view(request):
     """
@@ -53,7 +55,7 @@ def register_view(request):
     # Если данные невалидные, возвращаем ошибки
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+@csrf_exempt
 @api_view(['GET','POST'])
 def login_view(request):
     """
@@ -108,7 +110,7 @@ def login_view(request):
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+@csrf_exempt
 @api_view(['POST'])
 def logout_view(request):
     """
@@ -124,7 +126,7 @@ def logout_view(request):
         status=status.HTTP_400_BAD_REQUEST
     )
 
-
+@csrf_exempt
 @api_view(['PUT', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def update_profile_view(request):
@@ -144,7 +146,7 @@ def update_profile_view(request):
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+@csrf_exempt
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_account_view(request):
