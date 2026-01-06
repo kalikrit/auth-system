@@ -37,6 +37,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField('Фамилия', max_length=150, blank=True)
     patronymic = models.CharField('Отчество', max_length=150, blank=True)
     
+    role = models.ForeignKey(
+        'auth_system.Role',  # кавычки потому что модель Role ещё не объявлена
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name='Роль',
+        related_name='users'
+    )
+        
     # Статусы
     is_active = models.BooleanField('Активен', default=True)
     is_staff = models.BooleanField('Персонал', default=False)  # доступ в админку
