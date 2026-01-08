@@ -107,7 +107,7 @@ class RolePermission(models.Model):
     role = models.ForeignKey(
         Role,
         on_delete=models.CASCADE,
-        related_name='permissions',
+        related_name='role_permissions',
         verbose_name='Роль'
     )
     permission = models.ForeignKey(

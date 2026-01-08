@@ -34,7 +34,7 @@ class HasPermission(BasePermission):
             )
         
         # 4. Получаем все разрешения роли пользователя
-        user_permissions = request.user.role.permissions.values_list(
+        user_permissions = request.user.role.role_permissions.values_list(
             'permission__codename', flat=True
         )
         
